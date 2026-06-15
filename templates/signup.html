@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Sign Up - Corruption Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-body p-4">
+        <h4 class="card-title mb-3 text-center">Create Account</h4>
+        <p class="text-muted text-center small mb-4">
+          Register a new account to access the corruption detection system.
+        </p>
+        <form method="post" novalidate>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+              minlength="3"
+              autofocus
+              placeholder="Choose a username (min 3 characters)"
+            >
+            <div class="form-text">Must be at least 3 characters long.</div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+              minlength="6"
+              placeholder="Enter password (min 6 characters)"
+            >
+            <div class="form-text">Must be at least 6 characters long.</div>
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirm_password"
+              name="confirm_password"
+              required
+              minlength="6"
+              placeholder="Re-enter password"
+            >
+          </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" name="role" class="form-select" required>
+              <option value="officer" selected>Officer</option>
+              <option value="admin">Admin</option>
+            </select>
+            <div class="form-text">
+              <strong>Officer:</strong> Can add transactions and view reports.<br>
+              <strong>Admin:</strong> Can manage schemes and all officer features.
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">
+              Create Account
+            </button>
+          </div>
+        </form>
+        <hr class="my-4">
+        <div class="text-center">
+          <p class="mb-0">Already have an account?</p>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-sm mt-2">
+            Sign In
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

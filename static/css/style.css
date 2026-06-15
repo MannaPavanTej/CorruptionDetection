@@ -1,0 +1,38 @@
+/* Global layout */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.navbar-brand {
+  letter-spacing: 0.03em;
+}
+
+main.container {
+  max-width: 1140px;
+}
+
+/* Cards & tables */
+.card {
+  border-radius: 0.6rem;
+}
+
+.table thead th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge {
+  font-weight: 500;
+}
+
+/* Login page */
+.card .form-control:focus {
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+}
+

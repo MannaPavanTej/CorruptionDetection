@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Transactions - Corruption Detection{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Transactions</h4>
+  <a href="{{ url_for('add_transaction') }}" class="btn btn-primary btn-sm">
+    + New Transaction
+  </a>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    {% if transactions %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Beneficiary</th>
+            <th>Scheme</th>
+            <th>Location</th>
+            <th>Expected</th>
+            <th>Transferred</th>
+            <th>Diff</th>
+            <th>Delay (days)</th>
+            <th>Fraud %</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tx in transactions %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ tx.date }}</td>
+            <td>{{ tx.beneficiary_name }}</td>
+            <td>{{ tx.scheme.name if tx.scheme else '—' }}</td>
+            <td>{{ tx.location }}</td>
+            <td>₹ {{ tx.expected_amount | round(2) }}</td>
+            <td>₹ {{ tx.transferred_amount | round(2) }}</td>
+            <td
+              class="{% if tx.amount_difference > 0 %}text-success{% elif tx.amount_difference < 0 %}text-danger{% else %}text-muted{% endif %}"
+            >
+              {{ tx.amount_difference | round(2) }}
+            </td>
+            <td>{{ tx.delay_days }}</td>
+            <td>
+              {% if tx.corruption_probability is not none %}
+                {{ (tx.corruption_probability * 100) | round(1) }}%
+              {% else %}
+                <span class="text-muted">N/A</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if tx.is_corruption_detected %}
+              <span class="badge bg-danger">Corruption Detected</span>
+              {% else %}
+              <span class="badge bg-success">Normal</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <p class="text-muted mb-0">No transactions recorded yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Add Transaction - Corruption Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">Add New Transaction</h4>
+      <a href="{{ url_for('transactions') }}" class="btn btn-outline-secondary btn-sm">
+        Back to Transactions
+      </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <form method="post" novalidate>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="scheme_id" class="form-label">Scheme</label>
+              <select id="scheme_id" name="scheme_id" class="form-select" required>
+                {% for scheme in schemes %}
+                <option value="{{ scheme.id }}">{{ scheme.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="beneficiary_name" class="form-label">Beneficiary Name</label>
+              <input
+                type="text"
+                id="beneficiary_name"
+                name="beneficiary_name"
+                class="form-control"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="expected_amount" class="form-label">Expected Amount</label>
+              <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  id="expected_amount"
+                  name="expected_amount"
+                  class="form-control"
+                  required
+                >
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="transferred_amount" class="form-label">Transferred Amount</label>
+              <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  id="transferred_amount"
+                  name="transferred_amount"
+                  class="form-control"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                class="form-control"
+                placeholder="City or region"
+              >
+              <div class="form-text">
+                Leave blank to classify as <strong>Other</strong>.
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="date" class="form-label">Date</label>
+              <input type="date" id="date" name="date" class="form-control">
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="delay_days" class="form-label">Delay (days)</label>
+              <input
+                type="number"
+                min="0"
+                id="delay_days"
+                name="delay_days"
+                class="form-control"
+                value="0"
+              >
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">
+              Save and Predict Corruption
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

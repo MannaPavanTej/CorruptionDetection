@@ -37,7 +37,10 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "corruption_model.pkl")
 app = Flask(__name__)
 
 # NOTE: Use a more secure secret key for production.
-app.config["SECRET_KEY"] = "change-this-secret-key"
+app.config["SECRET_KEY"] = os.environ.get(
+    "SECRET_KEY",
+    "dev-secret-key-change-in-production"
+)
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_PATH}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -542,15 +545,33 @@ def reports():
 def create_default_admin():
     """
     Create a default admin user if no users exist.
-    Username: admin
-    Password: admin123
+
+    Admin credentials are read from environment variables.
     """
+
     if User.query.count() == 0:
-        admin = User(username="admin", role="admin")
-        admin.set_password("admin123")
+        admin_username = os.environ.get("ADMIN_USERNAME", "admin")
+        admin_password = os.environ.get("ADMIN_PASSWORD")
+
+        if not admin_password:
+            app.logger.warning(
+                "ADMIN_PASSWORD is not set. Default admin account was not created."
+            )
+            return
+
+        admin = User(
+            username=admin_username,
+            role="admin"
+        )
+        admin.set_password(admin_password)
+
         db.session.add(admin)
         db.session.commit()
-        app.logger.info("Default admin user created (username='admin').")
+
+        app.logger.info(
+            "Default admin user created (username='%s').",
+            admin_username
+        )
 
 
 def init_db():

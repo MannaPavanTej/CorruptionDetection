@@ -1,90 +1,140 @@
-# Corruption Detection System (Flask + ML)
+# Corruption Detection System (Flask + Machine Learning)
 
-This project is an AI-based **Corruption Detection System** built with:
+An AI-based prototype for identifying potentially suspicious transactions in government schemes using **Flask, SQLite, SQLAlchemy, and a Random Forest machine learning model**.
 
-- **Backend**: Flask
-- **Database**: SQLite (via SQLAlchemy)
-- **Machine Learning**: scikit-learn (RandomForestClassifier)
-- **Frontend**: HTML, CSS, Bootstrap, Chart.js
+The system allows administrators and officers to manage government schemes and transactions, while the ML model calculates a corruption probability for each transaction.
 
-The system monitors government scheme transactions and predicts possible corruption using a trained machine learning model.
+> **Note:** This project is a prototype. The current ML model is trained and evaluated using synthetically generated transaction data. Its evaluation results should not be interpreted as real-world corruption-detection accuracy.
+
+---
+
+## Tech Stack
+
+- **Backend:** Flask
+- **Database:** SQLite
+- **ORM:** Flask-SQLAlchemy
+- **Machine Learning:** scikit-learn
+- **ML Algorithm:** Random Forest Classifier
+- **Data Processing:** Pandas, NumPy
+- **Visualization:** Matplotlib, Chart.js
+- **Frontend:** HTML, CSS, Bootstrap
+- **Authentication:** Flask sessions + Werkzeug password hashing
+
+---
 
 ## Features
 
-- **Authentication**
-  - Admin login/logout
-  - Officer login
-- **Scheme Management**
-  - Add government schemes
-  - Define allocated amount
-- **Transaction Management**
-  - Add transaction details (scheme, beneficiary, expected vs transferred amount, location, date, delay days)
-  - ML-based corruption probability prediction on each new transaction
-- **Dashboard**
-  - Total schemes
-  - Total transactions
-  - Number of corruption cases
-  - Corruption by location (bar chart using Chart.js)
-  - Display fraud probability
+### Authentication
+
+- Admin login and logout
+- Officer login
+- Password hashing using Werkzeug
+- Role-based access control
+
+### Government Scheme Management
+
+- Add government schemes
+- Define allocated scheme amounts
+- View available schemes
+
+### Transaction Management
+
+- Add transaction details
+- Select government scheme
+- Record beneficiary information
+- Compare expected and transferred amounts
+- Record transaction location
+- Record transaction date
+- Record payment delay
+- Automatically calculate corruption probability using the ML model
+
+### Corruption Detection
+
+The Random Forest model evaluates transaction features and generates a probability indicating whether a transaction may be suspicious.
+
+The system flags transactions when their predicted corruption probability crosses the configured detection threshold.
+
+### Dashboard
+
+The dashboard provides an overview of:
+
+- Total schemes
+- Total transactions
+- Detected corruption cases
+- Corruption distribution by location
+- Transaction risk/corruption probability
+- Visual charts using Chart.js
+
+### ML Model Evaluation
+
+The training pipeline generates:
+
+- Accuracy
+- ROC-AUC score
+- Classification report
+- Confusion matrix
+- ROC curve
+- Feature importance chart
+
+---
+
+## Machine Learning
+
+The current model uses a **Random Forest Classifier**.
+
+### Input Features
+
+The model uses transaction-related features including:
+
+- Scheme ID
+- Expected amount
+- Transferred amount
+- Amount difference
+- Delay in days
+- Transaction location
+
+### Current Model Results
+
+The model was evaluated on a synthetic test dataset containing **400 transactions**.
+
+| Metric | Result |
+|---|---:|
+| Test Accuracy | 93.75% |
+| ROC-AUC | 0.9008 |
+| Suspicious Transaction Recall | 80% |
+
+### Evaluation Visualizations
+
+The training script generates the following files:
+
+```text
+evaluation/
+├── confusion_matrix.png
+├── roc_curve.png
+└── feature_importance.png
 
 ## Project Structure
 
 ```text
 CorruptionDetection/
-  app.py
-  model_training.py
-  requirements.txt
-  README.md
-  database.db              # created at runtime
-  /models                  # trained ML model pickle
-  /templates               # HTML templates
-  /static                  # CSS, JS, assets
-```
-
-## Setup Instructions
-
-1. **Create and activate a virtual environment (recommended)**
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-2. **Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-3. **Train the ML model**
-
-This will create the trained RandomForest model and encoder inside the `models` folder.
-
-```bash
-python model_training.py
-```
-
-4. **Run the Flask app**
-
-```bash
-python app.py
-```
-
-The app will start on `http://127.0.0.1:5000/` by default.
-
-5. **Default Credentials**
-
-On first run, the app will create an admin user if none exists:
-
-- **Username**: `admin`
-- **Password**: `admin123`
-- **Role**: `admin`
-
-You can create officer accounts from within the database or extend the app to provide an admin UI for user creation.
-
-## Notes
-
-- The ML model is trained on a **synthetic sample dataset** defined in `model_training.py`. You can replace this with real, cleaned data as needed.
-- The app uses **session-based authentication** with password hashing (Werkzeug).
-- All critical sections are commented for clarity and easy extension.
-
+│
+├── app.py
+├── model_training.py
+├── seed_data.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── models/
+│   └── corruption_model.pkl
+│
+├── evaluation/
+│   ├── confusion_matrix.png
+│   ├── roc_curve.png
+│   └── feature_importance.png
+│
+├── templates/
+│   └── ...
+│
+└── static/
+    └── ...

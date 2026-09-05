@@ -144,7 +144,7 @@ def main():
         schemes = seed_schemes(force=force)
         seed_transactions(schemes, force=force)
     print("Done. Start the app with: python app.py")
-    print("Then open http://127.0.0.1:5000/ and log in as admin / admin123")
+    print("Open http://127.0.0.1:5000/ and log in with your configured admin account.")
     print("Check Dashboard, Transactions, and Corruption Reports to see the dummy data.")
 
 
